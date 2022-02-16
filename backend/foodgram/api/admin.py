@@ -1,29 +1,27 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
+
 from recipes import models as recipes_models
 
-admin.site.register(recipes_models.User, UserAdmin)
+
+class ComponentInline(admin.TabularInline):
+    model = recipes_models.Amount
 
 
 class TagsAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'color', 'slug')
-
-
-admin.site.register(recipes_models.Tag, TagsAdmin)
+    search_fields = ('name', 'color', 'slug')
+    list_filter = ('name', 'color', 'slug')
 
 
 class IngredientsAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'measurement_unit')
-
-
-admin.site.register(recipes_models.Ingredient, IngredientsAdmin)
+    search_fields = ('name', )
+    list_filter = ('measurement_unit', )
 
 
 class FollowsAdmin(admin.ModelAdmin):
     list_display = ('user', 'author')
-
-
-admin.site.register(recipes_models.Follow, FollowsAdmin)
 
 
 class RecipeAdmin(admin.ModelAdmin):
@@ -32,12 +30,26 @@ class RecipeAdmin(admin.ModelAdmin):
         'name',
         'text',
         'cooking_time',
-        'image',
-        # 'tags',
         'author',
-        # 'ingredients',
         'pub_date'
     )
+    list_filter = ('author', 'name', 'tags')
+    inlines = (ComponentInline,)
 
 
+class ShoppingListAdmin(admin.ModelAdmin):
+    list_display = ('user', 'recipe')
+    list_filter = ('user', 'recipe')
+
+
+class FavoriteAdmin(admin.ModelAdmin):
+    list_display = ('user', 'recipe')
+
+
+admin.site.register(recipes_models.User, UserAdmin)
+admin.site.register(recipes_models.Tag, TagsAdmin)
+admin.site.register(recipes_models.Ingredient, IngredientsAdmin)
+admin.site.register(recipes_models.Follow, FollowsAdmin)
 admin.site.register(recipes_models.Recipe, RecipeAdmin)
+admin.site.register(recipes_models.ShoppingList, ShoppingListAdmin)
+admin.site.register(recipes_models.Favorite, FavoriteAdmin)

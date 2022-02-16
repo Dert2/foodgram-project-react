@@ -1,33 +1,21 @@
 # from datetime import timedelta
 import os
-from os.path import join, dirname
+
+from os.path import dirname, join
+
 from dotenv import load_dotenv
+
 dotenv_path = join(dirname(__file__), '.env')
 load_dotenv(dotenv_path)
-SECRET_KEY = os.environ.get("SECRET_KEY")
-DATABASE_PASSWORD = os.environ.get("DATABASE_PASSWORD")
 
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-
 
 SECRET_KEY = os.getenv('SECRET_KEY')
 
-
-DEBUG = os.getenv('DEBUG', default='False')
-
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-
-
-# Application definition
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -77,33 +65,32 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'foodgram.wsgi.application'
 
+ENV = os.getenv('ENV')
 
-# Database
-# https://docs.djangoproject.com/en/2.2/ref/settings/#databases
+if ENV == 'DEV':
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': os.getenv(
-#             'DB_ENGINE',
-#             default='django.db.backends.postgresql'
-#         ),
-#         'NAME': os.getenv('DB_NAME', default='postgres'),
-#         'USER': os.getenv('POSTGRES_USER', default='postgres'),
-#         'PASSWORD': os.getenv('POSTGRES_PASSWORD', default='postgres'),
-#         'HOST': os.getenv('DB_HOST', default='db'),
-#         'PORT': os.getenv('DB_PORT', default='5432')
-#     }
-# }
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
     }
-}
 
+else:
 
-# Password validation
-# https://docs.djangoproject.com/en/2.2/ref/settings/#auth-password-validators
+    DATABASES = {
+        'default': {
+            'ENGINE': os.getenv(
+                'DB_ENGINE',
+                default='django.db.backends.postgresql'
+            ),
+            'NAME': os.getenv('DB_NAME', default='postgres'),
+            'USER': os.getenv('POSTGRES_USER', default='postgres'),
+            'PASSWORD': os.getenv('POSTGRES_PASSWORD', default='postgres'),
+            'HOST': os.getenv('DB_HOST', default='db'),
+            'PORT': os.getenv('DB_PORT', default='5432')
+        }
+    }
 
 dcap = 'django.contrib.auth.password_validation.'
 AUTH_PASSWORD_VALIDATORS = [
@@ -121,11 +108,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
-# Internationalization
-# https://docs.djangoproject.com/en/2.2/topics/i18n/
-
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru'
 
 TIME_ZONE = 'UTC'
 
@@ -134,10 +117,6 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
-
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
 
@@ -155,23 +134,6 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'api.paginations.PageLimitPagination',
     'PAGE_SIZE': 6,
 }
-
-
-# SIMPLE_JWT = {
-#    'ACCESS_TOKEN_LIFETIME': timedelta(days=10),
-#    'AUTH_HEADER_TYPES': ('Bearer',),
-# }
-
-
-# auth_module, user_model = django_settings.AUTH_USER_MODEL.rsplit(".", 1)
-# User = apps.get_model(auth_module, user_model)
-
-# DJOSER = {
-#     'SEND_ACTIVATION_EMAIL': False,
-#     'LOGIN_FIELD': 'User.email',
-# }
-
-# User = get_user_model()
 
 DJOSER = {
     'SEND_ACTIVATION_EMAIL': False,
