@@ -4,12 +4,10 @@ import uuid
 from django.contrib.auth.hashers import check_password
 from django.core.files.base import ContentFile
 from django.shortcuts import get_object_or_404
-from rest_framework import serializers
-
 from foodgram.settings import MAX_INGREDIENT_AMOUNT
-from recipes.models import (
-    Amount, Favorite, Follow, Ingredient, Recipe, ShoppingList, Tag, User,
-)
+from recipes.models import (Amount, Favorite, Follow, Ingredient, Recipe,
+                            ShoppingList, Tag, User)
+from rest_framework import serializers
 
 
 class CustomBase64ImageField(serializers.ImageField):
@@ -52,7 +50,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         user = User.objects.create(**validated_data)
-        user.set_password(validated_data["password"])
+        user.set_password(validated_data['password'])
         user.save()
         return user
 
@@ -97,9 +95,13 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class UserFollowSerializer(serializers.ModelSerializer):
-    is_subscribed = serializers.SerializerMethodField()
+    is_subscribed = serializers.SerializerMethodField(
+        name='get_is_subscribed'
+    )
     recipes = UserRecipeSerializer(many=True, read_only=True)
-    recipes_count = serializers.SerializerMethodField()
+    recipes_count = serializers.SerializerMethodField(
+        name='get_recipes_count'
+    )
 
     class Meta:
         model = User
@@ -178,8 +180,12 @@ class IngredientSerializer(serializers.ModelSerializer):
 
 
 class AmountSerializer(serializers.ModelSerializer):
-    name = serializers.SerializerMethodField()
-    measurement_unit = serializers.SerializerMethodField()
+    name = serializers.SerializerMethodField(
+        name='get_name'
+    )
+    measurement_unit = serializers.SerializerMethodField(
+        name='get_measurement_unit'
+    )
 
     class Meta:
         model = Amount
@@ -201,8 +207,12 @@ class RecipeSerializer(serializers.ModelSerializer):
     ingredients = AmountSerializer(many=True, source='components')
     tags = TagSerializer(many=True, read_only=True)
     author = UserSerializer(read_only=True)
-    is_in_shopping_cart = serializers.SerializerMethodField()
-    is_favorited = serializers.SerializerMethodField()
+    is_in_shopping_cart = serializers.SerializerMethodField(
+        name='get_is_in_shopping_cart'
+    )
+    is_favorited = serializers.SerializerMethodField(
+        name='get_is_favorited'
+    )
 
     class Meta:
         model = Recipe

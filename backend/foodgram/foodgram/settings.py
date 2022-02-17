@@ -1,13 +1,10 @@
 # from datetime import timedelta
 import os
-
-from reportlab.pdfbase import pdfmetrics
-
-from reportlab.pdfbase.ttfonts import TTFont
-
 from os.path import dirname, join
 
 from dotenv import load_dotenv
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
 
 dotenv_path = join(dirname(__file__), '.env')
 load_dotenv(dotenv_path)

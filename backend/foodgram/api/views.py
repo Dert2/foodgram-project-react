@@ -1,30 +1,30 @@
+from api.paginations import PageLimitPagination
 from django.db.models import F, Sum
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
+from foodgram.settings import (AFSPDF, APPLICATIONPDF, FREE_SANS_FONT,
+                               FREE_SANS_FONT_SIZE, FREE_SANS_FONT_SIZE_HEADER,
+                               INDENT, ROW_AFTER_HEADER, ROW_AFTER_INGRED,
+                               ROW_HEADER)
+from recipes.models import (Amount, Favorite, Follow, Ingredient, Recipe,
+                            ShoppingList, Tag, User)
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen import canvas
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.pagination import LimitOffsetPagination
-from rest_framework.permissions import (
-    AllowAny, IsAuthenticated, IsAuthenticatedOrReadOnly,
-)
+from rest_framework.permissions import (AllowAny, IsAuthenticated,
+                                        IsAuthenticatedOrReadOnly)
 from rest_framework.response import Response
 
-from api.paginations import PageLimitPagination
-from foodgram.settings import AFSPDF, APPLICATIONPDF
-from recipes.models import (
-    Amount, Favorite, Follow, Ingredient, Recipe, ShoppingList, Tag, User,
-)
-
 from .filters import IngredientsFilter, RecipesFilter
-from .serializers import (
-    FollowSerializer, IngredientSerializer, PasswordSerializer,
-    RecipeSerializer, RecipeSerializerCreate, ShopAndFavoriteSerializer,
-    TagSerializer, UserCreateSerializer, UserFollowSerializer, UserSerializer,
-)
+from .serializers import (FollowSerializer, IngredientSerializer,
+                          PasswordSerializer, RecipeSerializer,
+                          RecipeSerializerCreate, ShopAndFavoriteSerializer,
+                          TagSerializer, UserCreateSerializer,
+                          UserFollowSerializer, UserSerializer)
 
 
 class HTTPMethod:
@@ -153,26 +153,26 @@ class RecipeViewSet(viewsets.ModelViewSet):
         response = HttpResponse(content_type=APPLICATIONPDF)
         response['Content-Disposition'] = AFSPDF
         canvas_blank = canvas.Canvas(response)
-        canvas_blank.setFont('FreeSans', 18)
+        canvas_blank.setFont(FREE_SANS_FONT, FREE_SANS_FONT_SIZE_HEADER)
 
-        row = 800
+        row = ROW_HEADER
         canvas_blank.drawString(
-            100,
+            INDENT,
             row,
             'Список покупок:')
-        row -= 40
+        row -= ROW_AFTER_HEADER
 
-        canvas_blank.setFont('FreeSans', 14)
+        canvas_blank.setFont(FREE_SANS_FONT, FREE_SANS_FONT_SIZE)
         item = 1
 
         for ingredient in shop_list:
             canvas_blank.drawString(
-                100,
+                INDENT,
                 row,
                 f'{item}) '
                 f'{ingredient["name"]} - '
                 f'{ingredient["amount"]}, {ingredient["measurement_unit"]}')
-            row -= 30
+            row -= ROW_AFTER_INGRED
             item += 1
 
         canvas_blank.showPage()
