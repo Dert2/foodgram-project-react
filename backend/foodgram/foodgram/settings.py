@@ -1,6 +1,10 @@
 # from datetime import timedelta
 import os
 
+from reportlab.pdfbase import pdfmetrics
+
+from reportlab.pdfbase.ttfonts import TTFont
+
 from os.path import dirname, join
 
 from dotenv import load_dotenv
@@ -8,6 +12,11 @@ from dotenv import load_dotenv
 dotenv_path = join(dirname(__file__), '.env')
 load_dotenv(dotenv_path)
 
+MAX_INGREDIENT_AMOUNT = 1
+
+APPLICATIONPDF = 'application/pdf'
+
+AFSPDF = 'attachment; filename="somefilename.pdf"'
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -139,3 +148,5 @@ DJOSER = {
     'SEND_ACTIVATION_EMAIL': False,
     'LOGIN_FIELD': 'email',
 }
+
+pdfmetrics.registerFont(TTFont('FreeSans', 'FreeSans.ttf'))

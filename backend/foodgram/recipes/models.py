@@ -29,7 +29,7 @@ class User(AbstractUser):
 class Ingredient(models.Model):
     name = models.CharField(
         max_length=200,
-        verbose_name="Название ингредиента"
+        verbose_name='Название ингредиента'
     )
     measurement_unit = models.CharField(
         max_length=200,
@@ -72,7 +72,7 @@ class Recipe(models.Model):
     )
     text = models.TextField(max_length=500)
     cooking_time = models.IntegerField(
-        validators=[MinValueValidator(1), ],
+        validators=(MinValueValidator(1),),
         verbose_name='Время приготовления в минутах',
     )
     image = models.ImageField(
@@ -119,7 +119,7 @@ class Favorite(models.Model):
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name="favorites"
+        related_name='favorites'
     )
 
     class Meta:
@@ -154,7 +154,7 @@ class ShoppingList(models.Model):
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name="shopping_list"
+        related_name='shopping_list'
     )
     recipe = models.ForeignKey(
         Recipe, on_delete=models.CASCADE,

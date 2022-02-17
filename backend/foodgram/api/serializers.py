@@ -6,6 +6,7 @@ from django.core.files.base import ContentFile
 from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 
+from foodgram.settings import MAX_INGREDIENT_AMOUNT
 from recipes.models import (
     Amount, Favorite, Follow, Ingredient, Recipe, ShoppingList, Tag, User,
 )
@@ -47,7 +48,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
             'password'
         )
         read_only_fields = ('id', )
-        extra_kwargs = {"password": {"write_only": True}}
+        extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
         user = User.objects.create(**validated_data)
@@ -69,7 +70,9 @@ class UserRecipeSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
-    is_subscribed = serializers.SerializerMethodField()
+    is_subscribed = serializers.SerializerMethodField(
+        method_name='get_is_subscribed'
+    )
 
     class Meta:
         model = User
@@ -247,9 +250,6 @@ class AmountSerializerCreate(serializers.ModelSerializer):
             'id',
             'amount',
         )
-        extra_kwargs = {
-            'amount': {'validators': []},
-        }
 
 
 class RecipeSerializerCreate(serializers.ModelSerializer):
@@ -307,7 +307,7 @@ class RecipeSerializerCreate(serializers.ModelSerializer):
                 raise serializers.ValidationError(
                     'Ингредиенты в рецепте должны быть уникальными!')
             set_id.add(item['ingredient'].id)
-            if item['amount'] < 1:
+            if item['amount'] < MAX_INGREDIENT_AMOUNT:
                 raise serializers.ValidationError(
                     'Количество ингредиента должно быть '
                     'целым числом, а значение не менее 1!')

@@ -14,6 +14,7 @@ from rest_framework.permissions import (
 from rest_framework.response import Response
 
 from api.paginations import PageLimitPagination
+from foodgram.settings import AFSPDF, APPLICATIONPDF
 from recipes.models import (
     Amount, Favorite, Follow, Ingredient, Recipe, ShoppingList, Tag, User,
 )
@@ -33,7 +34,6 @@ class HTTPMethod:
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
-    serializer_class = UserSerializer
     permission_classes = (AllowAny,)
     pagination_class = LimitOffsetPagination
 
@@ -150,11 +150,9 @@ class RecipeViewSet(viewsets.ModelViewSet):
             measurement_unit=F('ingredient__measurement_unit')
         ).annotate(amount=Sum('amount')).order_by()
 
-        response = HttpResponse(content_type='application/pdf')
-        response['Content-Disposition'] = (
-            'attachment; filename="somefilename.pdf"')
+        response = HttpResponse(content_type=APPLICATIONPDF)
+        response['Content-Disposition'] = AFSPDF
         canvas_blank = canvas.Canvas(response)
-        pdfmetrics.registerFont(TTFont('FreeSans', 'FreeSans.ttf'))
         canvas_blank.setFont('FreeSans', 18)
 
         row = 800
