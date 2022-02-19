@@ -1,29 +1,32 @@
-from api.paginations import PageLimitPagination
 from django.db.models import F, Sum
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
-from recipes.models import (Amount, Favorite, Follow, Ingredient, Recipe,
-                            ShoppingList, Tag, User)
 from reportlab.pdfgen import canvas
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.pagination import LimitOffsetPagination
-from rest_framework.permissions import (AllowAny, IsAuthenticated,
-                                        IsAuthenticatedOrReadOnly)
+from rest_framework.permissions import (
+    AllowAny, IsAuthenticated, IsAuthenticatedOrReadOnly,
+)
 from rest_framework.response import Response
 
-from foodgram.settings import (AFSPDF, APPLICATIONPDF, FREE_SANS_FONT,
-                               FREE_SANS_FONT_SIZE, FREE_SANS_FONT_SIZE_HEADER,
-                               INDENT, ROW_AFTER_HEADER, ROW_AFTER_INGRED,
-                               ROW_HEADER)
+from api.paginations import PageLimitPagination
+from foodgram.settings import (
+    AFSPDF, APPLICATIONPDF, FREE_SANS_FONT, FREE_SANS_FONT_SIZE,
+    FREE_SANS_FONT_SIZE_HEADER, INDENT, ROW_AFTER_HEADER, ROW_AFTER_INGRED,
+    ROW_HEADER,
+)
+from recipes.models import (
+    Amount, Favorite, Follow, Ingredient, Recipe, ShoppingList, Tag, User,
+)
 
 from .filters import IngredientsFilter, RecipesFilter
-from .serializers import (FollowSerializer, IngredientSerializer,
-                          PasswordSerializer, RecipeSerializer,
-                          RecipeSerializerCreate, ShopAndFavoriteSerializer,
-                          TagSerializer, UserCreateSerializer,
-                          UserFollowSerializer, UserSerializer)
+from .serializers import (
+    FollowSerializer, IngredientSerializer, PasswordSerializer,
+    RecipeSerializer, RecipeSerializerCreate, ShopAndFavoriteSerializer,
+    TagSerializer, UserCreateSerializer, UserFollowSerializer, UserSerializer,
+)
 
 
 class HTTPMethod:
