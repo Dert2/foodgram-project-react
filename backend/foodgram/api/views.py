@@ -64,10 +64,10 @@ class UserViewSet(viewsets.ModelViewSet):
         if serializer.is_valid(raise_exception=True):
             user.set_password(serializer.validated_data['new_password'])
             user.save()
-            return Response(
-                'Пароль успешно изменен',
-                status=status.HTTP_204_NO_CONTENT
-            )
+        return Response(
+            'Пароль успешно изменен',
+            status=status.HTTP_204_NO_CONTENT
+        )
 
     @action(
         detail=True,
