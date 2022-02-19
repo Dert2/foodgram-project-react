@@ -9,8 +9,6 @@ from foodgram.settings import (AFSPDF, APPLICATIONPDF, FREE_SANS_FONT,
                                ROW_HEADER)
 from recipes.models import (Amount, Favorite, Follow, Ingredient, Recipe,
                             ShoppingList, Tag, User)
-from reportlab.pdfbase import pdfmetrics
-from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen import canvas
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
@@ -100,17 +98,14 @@ class UserViewSet(viewsets.ModelViewSet):
         permission_classes=(IsAuthenticated,),
     )
     def subscriptions(self, request):
-        user = request.user
-        authors_in_follows = User.objects.filter(following__user=user)
+        authors_in_follows = User.objects.filter(following__user=request.user)
+        page = self.paginate_queryset(authors_in_follows)
         serializer = UserFollowSerializer(
-            authors_in_follows,
+            page,
             many=True,
             context={'user': request.user}
         )
-        return Response(
-            serializer.data,
-            status=status.HTTP_200_OK
-        )
+        return self.get_paginated_response(serializer.data)
 
 
 class TagViewSet(viewsets.ModelViewSet):
