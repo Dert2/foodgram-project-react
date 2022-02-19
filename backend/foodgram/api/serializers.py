@@ -4,10 +4,11 @@ import uuid
 from django.contrib.auth.hashers import check_password
 from django.core.files.base import ContentFile
 from django.shortcuts import get_object_or_404
-from foodgram.settings import MAX_INGREDIENT_AMOUNT
 from recipes.models import (Amount, Favorite, Follow, Ingredient, Recipe,
                             ShoppingList, Tag, User)
 from rest_framework import serializers
+
+from foodgram.settings import MAX_INGREDIENT_AMOUNT
 
 
 class CustomBase64ImageField(serializers.ImageField):
