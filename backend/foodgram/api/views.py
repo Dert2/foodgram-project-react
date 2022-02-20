@@ -170,7 +170,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
                 row,
                 f'{item}) '
                 f'{ingredient["name"]} - '
-                f'{ingredient["amount"]},  {ingredient["measurement_unit"]}')
+                f'{ingredient["amount"]}, {ingredient["measurement_unit"]}')
             row -= ROW_AFTER_INGRED
             item += 1
 
