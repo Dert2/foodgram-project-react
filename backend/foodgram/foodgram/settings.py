@@ -1,8 +1,5 @@
-# from datetime import timedelta
 import os
-
 from reportlab.pdfbase import pdfmetrics
-
 from reportlab.pdfbase.ttfonts import TTFont
 
 
