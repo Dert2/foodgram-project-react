@@ -11,8 +11,8 @@ services:
     image: seofale/foodgram:latest
     restart: always
     volumes: 
-      - static_value:/code/static/
-      - media_value:/code/media/
+      - static_value:/app/static-files/
+      - media_value:/app/media-files/
     depends_on:
       - db
     env_file:
