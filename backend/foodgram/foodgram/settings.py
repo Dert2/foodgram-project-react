@@ -1,16 +1,25 @@
 # from datetime import timedelta
 import os
 
-from os.path import dirname, join
-
-from dotenv import load_dotenv
 from reportlab.pdfbase import pdfmetrics
+
 from reportlab.pdfbase.ttfonts import TTFont
 
-dotenv_path = join(dirname(__file__), '.env')
-load_dotenv(dotenv_path)
-
 MAX_INGREDIENT_AMOUNT = 1
+
+FREE_SANS_FONT = 'FreeSans'
+
+FREE_SANS_FONT_SIZE_HEADER = 18
+
+FREE_SANS_FONT_SIZE = 14
+
+ROW_HEADER = 800
+
+ROW_AFTER_HEADER = 40
+
+ROW_AFTER_INGRED = 30
+
+INDENT = 100
 
 APPLICATIONPDF = 'application/pdf'
 
