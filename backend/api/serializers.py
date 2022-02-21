@@ -98,11 +98,11 @@ class UserSerializer(serializers.ModelSerializer):
 
 class UserFollowSerializer(serializers.ModelSerializer):
     is_subscribed = serializers.SerializerMethodField(
-        name='get_is_subscribed'
+        method_name='get_is_subscribed'
     )
     recipes = UserRecipeSerializer(many=True, read_only=True)
     recipes_count = serializers.SerializerMethodField(
-        name='get_recipes_count'
+        method_name='get_recipes_count'
     )
 
     class Meta:
@@ -183,10 +183,10 @@ class IngredientSerializer(serializers.ModelSerializer):
 
 class AmountSerializer(serializers.ModelSerializer):
     name = serializers.SerializerMethodField(
-        name='get_name'
+        method_name='get_name'
     )
     measurement_unit = serializers.SerializerMethodField(
-        name='get_measurement_unit'
+        method_name='get_measurement_unit'
     )
 
     class Meta:
@@ -210,10 +210,10 @@ class RecipeSerializer(serializers.ModelSerializer):
     tags = TagSerializer(many=True, read_only=True)
     author = UserSerializer(read_only=True)
     is_in_shopping_cart = serializers.SerializerMethodField(
-        name='get_is_in_shopping_cart'
+        method_name='get_is_in_shopping_cart'
     )
     is_favorited = serializers.SerializerMethodField(
-        name='get_is_favorited'
+        method_name='get_is_favorited'
     )
 
     class Meta:

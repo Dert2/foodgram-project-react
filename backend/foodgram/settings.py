@@ -25,7 +25,7 @@ AFSPDF = 'attachment; filename="somefilename.pdf"'
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-SECRET_KEY = os.getenv('SECRET_KEY')
+SECRET_KEY = 'ljutv%r)0nh-!3r!h*the1x%z29d2s2a#p2dy(u8bsejmv3m3*'
 
 DEBUG = True
 
