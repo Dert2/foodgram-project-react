@@ -22,6 +22,7 @@ class IngredientsAdmin(admin.ModelAdmin):
 
 class FollowsAdmin(admin.ModelAdmin):
     list_display = ('user', 'author')
+    search_fields = ('name',)
 
 
 class RecipeAdmin(admin.ModelAdmin):
@@ -33,7 +34,7 @@ class RecipeAdmin(admin.ModelAdmin):
         'author',
         'pub_date'
     )
-    list_filter = ('author', 'name', 'tags')
+    list_filter = ('tags',)
     inlines = (ComponentInline,)
 
 
@@ -44,7 +45,6 @@ class ShoppingListAdmin(admin.ModelAdmin):
 
 class FavoriteAdmin(admin.ModelAdmin):
     list_display = ('user', 'recipe')
-    search_fields = ('name',)
 
 
 admin.site.register(recipes_models.User, UserAdmin)
