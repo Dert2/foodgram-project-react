@@ -117,6 +117,7 @@ class TagViewSet(viewsets.ModelViewSet):
     serializer_class = TagSerializer
     permission_classes = (AllowAny,)
     http_method_names = ('get',)
+    pagination_class = None
 
 
 class IngredientViewSet(viewsets.ModelViewSet):
