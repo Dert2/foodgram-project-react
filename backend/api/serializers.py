@@ -312,7 +312,7 @@ class RecipeSerializerCreate(serializers.ModelSerializer):
     def validate_ingredients(self, value):
         if len(value) == 0:
             raise serializers.ValidationError(
-                'Должено быть не меньше ингредиент!')
+                'Должено быть не меньше 1 ингредиента!')
         set_id = set()
         for item in value:
             if item['ingredient'].id in set_id:

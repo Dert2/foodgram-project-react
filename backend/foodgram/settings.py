@@ -106,6 +106,7 @@ DATABASES = {
     }
 }
 
+
 dcap = 'django.contrib.auth.password_validation.'
 AUTH_PASSWORD_VALIDATORS = [
     {

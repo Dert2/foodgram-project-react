@@ -39,11 +39,12 @@ class RecipeAdmin(admin.ModelAdmin):
 
 class ShoppingListAdmin(admin.ModelAdmin):
     list_display = ('user', 'recipe')
-    list_filter = ('user', 'recipe')
+    search_fields = ('name',)
 
 
 class FavoriteAdmin(admin.ModelAdmin):
     list_display = ('user', 'recipe')
+    search_fields = ('name',)
 
 
 admin.site.register(recipes_models.User, UserAdmin)

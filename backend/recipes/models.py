@@ -70,7 +70,10 @@ class Recipe(models.Model):
         max_length=200,
         verbose_name='Название рецепта'
     )
-    text = models.TextField(max_length=500)
+    text = models.TextField(
+        max_length=500,
+        verbose_name='Текст'
+    )
     cooking_time = models.IntegerField(
         validators=(MinValueValidator(1),),
         verbose_name='Время приготовления в минутах',
@@ -181,6 +184,9 @@ class Amount(models.Model):
     )
     amount = models.IntegerField(
         default=1,
+        validators=(
+            MinValueValidator(1, "Минимальное количество ингредиентов - 1"),
+        ),
     )
 
     def __str__(self):
