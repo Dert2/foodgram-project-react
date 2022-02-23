@@ -128,6 +128,12 @@ class Favorite(models.Model):
     class Meta:
         verbose_name = 'Понравившийся'
         verbose_name_plural = 'Понравившиеся'
+        constraints = (
+            models.UniqueConstraint(
+                fields=('user', 'recipe'),
+                name='unique_user_recipe'
+            )
+        )
 
     def __str__(self):
         return self.recipe.name
@@ -170,6 +176,12 @@ class ShoppingList(models.Model):
     class Meta:
         verbose_name = 'Корзина'
         verbose_name_plural = 'Корзины'
+        constraints = (
+            models.UniqueConstraint(
+                fields=('user', 'recipe'),
+                name='unique_cart_user'
+            )
+        )
 
 
 class Amount(models.Model):

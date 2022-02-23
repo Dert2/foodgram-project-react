@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from reportlab.pdfgen import canvas
-from rest_framework import status, viewsets
+from rest_framework import status, viewsets, filters
 from rest_framework.decorators import action
 from rest_framework.pagination import LimitOffsetPagination
 from rest_framework.permissions import (
@@ -125,17 +125,17 @@ class IngredientViewSet(viewsets.ModelViewSet):
     serializer_class = IngredientSerializer
     permission_classes = (AllowAny,)
     http_method_names = ('get',)
-    filter_backends = (DjangoFilterBackend,)
+    filter_backends = (IngredientsFilter,)
     pagination_class = None
-    filterset_class = IngredientsFilter
+    search_fields = ('^name',)
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
     permission_classes = (IsAuthenticatedOrReadOnly,)
-    filterset_class = RecipesFilter
-    filter_backends = (DjangoFilterBackend,)
     pagination_class = PageLimitPagination
+    filter_backends = (filters.SearchFilter, DjangoFilterBackend)
+    filterset_class = RecipesFilter
 
     def get_serializer_class(self):
         if self.action in ('create', 'update', 'partial_update'):
@@ -145,7 +145,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     @action(detail=False)
     def download_shopping_cart(self, request):
         shop_list = Amount.objects.filter(
-            recipe__shopping_list__user=request.user).values(
+            recipe__shopping_list_user__user=request.user).values(
             name=F('ingredient__name'),
             measurement_unit=F('ingredient__measurement_unit')
         ).annotate(amount=Sum('amount')).order_by()
