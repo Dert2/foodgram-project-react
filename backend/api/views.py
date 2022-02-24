@@ -22,6 +22,7 @@ from recipes.models import (
 )
 
 from .filters import IngredientsFilter, RecipesFilter
+from .permissions import AdminOrReadOnly, AdminUserOrReadOnly
 from .serializers import (
     FollowSerializer, IngredientSerializer, PasswordSerializer,
     RecipeSerializer, RecipeSerializerCreate, ShopAndFavoriteSerializer,
@@ -115,27 +116,27 @@ class UserViewSet(viewsets.ModelViewSet):
 class TagViewSet(viewsets.ModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
-    permission_classes = (AllowAny,)
     http_method_names = ('get',)
     pagination_class = None
+    permission_classes = (AdminOrReadOnly,)
 
 
 class IngredientViewSet(viewsets.ModelViewSet):
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
-    permission_classes = (AllowAny,)
     http_method_names = ('get',)
     filter_backends = (IngredientsFilter,)
     pagination_class = None
     search_fields = ('^name',)
+    permission_classes = (AdminOrReadOnly,)
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
-    permission_classes = (IsAuthenticatedOrReadOnly,)
     pagination_class = PageLimitPagination
     filter_backends = (filters.SearchFilter, DjangoFilterBackend)
     filterset_class = RecipesFilter
+    permission_classes = (AdminUserOrReadOnly,)
 
     def get_serializer_class(self):
         if self.action in ('create', 'update', 'partial_update'):
@@ -145,7 +146,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     @action(detail=False)
     def download_shopping_cart(self, request):
         shop_list = Amount.objects.filter(
-            recipe__shopping_list_user__user=request.user).values(
+            recipe__shopping_list__user=request.user).values(
             name=F('ingredient__name'),
             measurement_unit=F('ingredient__measurement_unit')
         ).annotate(amount=Sum('amount')).order_by()

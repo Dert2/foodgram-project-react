@@ -36,6 +36,7 @@ class RecipeAdmin(admin.ModelAdmin):
     )
     list_filter = ('tags',)
     inlines = (ComponentInline,)
+    search_fields = ('name', 'author__username', 'author__email')
 
 
 class ShoppingListAdmin(admin.ModelAdmin):
